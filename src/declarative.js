@@ -1,9 +1,8 @@
-const acorn = require("acorn");
-const { stringify } = require("./utils.js");
-const uWS = require("uWebSockets.js");
+import { Parser } from "acorn";
+import { stringify } from "./utils.js";
+import * as uWS from "uWebSockets.js";
 
-const parser = acorn.Parser;
-
+const parser = Parser;
 const allowedResMethods = ['set', 'header', 'setHeader', 'status', 'send', 'end', 'append'];
 const allowedIdentifiers = ['query', 'params', ...allowedResMethods];
 const objKeyRegex = /[\s{\n]([A-Za-z-0-9_]+)(\s|\n)*?:/g;
@@ -21,7 +20,7 @@ function replaceSingleCharacter(str, index, char) {
 // - doesnt create variables
 // - only uses req.query and req.params
 // basically, its only simple, static responses
-module.exports = function compileDeclarative(cb, app) {
+export default function compileDeclarative(cb, app) {
     try {
         let code = cb.toString();
         // convert anonymous functions to named ones to make it valid code

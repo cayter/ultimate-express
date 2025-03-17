@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const { patternToRegex, needsConversionToRegex, deprecated, findIndexStartingFrom, canBeOptimized, NullObject, EMPTY_REGEX } = require("./utils.js");
-const Response = require("./response.js");
-const Request = require("./request.js");
-const { EventEmitter } = require("tseep");
-const compileDeclarative = require("./declarative.js");
-const statuses = require("statuses");
+import { patternToRegex, needsConversionToRegex, deprecated, findIndexStartingFrom, canBeOptimized, NullObject, EMPTY_REGEX } from "./utils.js";
+import Response from "./response.js";
+import Request from "./request.js";
+import { EventEmitter } from "node:events";
+import compileDeclarative from "./declarative.js";
 
 let resCodes = {}, resDecMethods = ['set', 'setHeader', 'header', 'send', 'end', 'append', 'status'];
 for(let method of resDecMethods) {
@@ -39,7 +38,7 @@ const supportedUwsMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS',
 
 const regExParam = /:(\w+)/g;
 
-module.exports = class Router extends EventEmitter {
+export default class Router extends EventEmitter {
     constructor(settings = {}) {
         super();
 

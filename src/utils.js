@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const mime = require("mime-types");
-const path = require("path");
-const proxyaddr = require("proxy-addr");
-const qs = require("qs");
-const querystring = require("fast-querystring");
-const etag = require("etag");
-const { Stats } = require("fs");
+import mime from "mime-types";
+import path from "node:path";
+import proxyaddr from "proxy-addr";
+import qs from "qs";
+import querystring from "fast-querystring";
+import etag from "etag";
+import { Stats } from "node:fs";
 
-const EMPTY_REGEX = new RegExp(``);
+export const EMPTY_REGEX = new RegExp(``);
 
-function fastQueryParse(query, options) {
+export function fastQueryParse(query, options) {
     const len = query.length;
     if(len === 0){
         return new NullObject();
@@ -39,11 +39,11 @@ function fastQueryParse(query, options) {
     return {...qs.parse(query, options)};
 }
 
-function removeDuplicateSlashes(path) {
+export function removeDuplicateSlashes(path) {
     return path.replace(/\/{2,}/g, '/');
 }
 
-function patternToRegex(pattern, isPrefix = false) {
+export function patternToRegex(pattern, isPrefix = false) {
     if(pattern instanceof RegExp) {
         return pattern;
     }
@@ -62,7 +62,7 @@ function patternToRegex(pattern, isPrefix = false) {
     return new RegExp(`^${regexPattern}${isPrefix ? '(?=$|\/)' : '$'}`);
 }
 
-function needsConversionToRegex(pattern) {
+export function needsConversionToRegex(pattern) {
     if(pattern instanceof RegExp) {
         return false;
     }
@@ -82,7 +82,7 @@ function needsConversionToRegex(pattern) {
         pattern.includes(']');
 }
 
-function canBeOptimized(pattern) {
+export function canBeOptimized(pattern) {
     if(pattern === '/*') {
         return false;
     }
@@ -105,7 +105,7 @@ function canBeOptimized(pattern) {
     return true;
 }
 
-function acceptParams(str) {
+export function acceptParams(str) {
     const length = str.length;
     const colonIndex = str.indexOf(';');
     let index = colonIndex === -1 ? length : colonIndex;
@@ -138,13 +138,13 @@ function acceptParams(str) {
     return ret;
 }
 
-function normalizeType(type) {
+export function normalizeType(type) {
     return ~type.indexOf('/') ?
         acceptParams(type) :
         { value: (mime.lookup(type) || 'application/octet-stream'), params: {} };
 }
 
-function stringify(value, replacer, spaces, escape) {
+export function stringify(value, replacer, spaces, escape) {
     let json = replacer || spaces
         ? JSON.stringify(value, replacer, spaces)
         : JSON.stringify(value);
@@ -167,7 +167,7 @@ function stringify(value, replacer, spaces, escape) {
     return json;
 }
 
-const defaultSettings = {
+export const defaultSettings = {
     'jsonp callback name': 'callback',
     'env': () => process.env.NODE_ENV ?? 'development',
     'etag': 'weak',
@@ -183,7 +183,7 @@ const defaultSettings = {
     'declarative responses': true
 };
 
-function compileTrust(val) {
+export function compileTrust(val) {
     if (typeof val === 'function') return val;
   
     if (val === true) {
@@ -206,7 +206,7 @@ function compileTrust(val) {
 }
 
 const shownWarnings = new Set();
-function deprecated(oldMethod, newMethod, full = false) {
+export function deprecated(oldMethod, newMethod, full = false) {
     const err = new Error();
     const pos = full ? err.stack.split('\n').slice(1).join('\n') : err.stack.split('\n')[3].trim().split('(').slice(1).join('(').split(')').slice(0, -1).join(')');
     if(shownWarnings.has(pos)) return;
@@ -224,7 +224,7 @@ function deprecated(oldMethod, newMethod, full = false) {
     })} u-express deprecated ${oldMethod}: Use ${newMethod} instead at ${pos}`);
 }
 
-function findIndexStartingFrom(arr, fn, index = 0) {
+export function findIndexStartingFrom(arr, fn, index = 0) {
     for(let i = index, end = arr.length; i < end; i++) {
         if(fn(arr[i], i, arr)) {
             return i;
@@ -233,7 +233,7 @@ function findIndexStartingFrom(arr, fn, index = 0) {
     return -1;
 };
 
-function decode (path) {
+export function decode (path) {
     try {
         return decodeURIComponent(path)
     } catch (err) {
@@ -241,9 +241,9 @@ function decode (path) {
     }
 }
 
-const UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
+export const UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
 
-function containsDotFile(parts) {
+export function containsDotFile(parts) {
     for(let i = 0, len = parts.length; i < len; i++) {
         const part = parts[i];
         if(part.length > 1 && part[0] === '.') {
@@ -293,7 +293,7 @@ function parseHttpDate(date) {
     return typeof timestamp === 'number' ? timestamp : NaN;
 }
 
-function isPreconditionFailure(req, res) {
+export function isPreconditionFailure(req, res) {
     const match = req.headers['if-match'];
 
     // if-match
@@ -314,7 +314,7 @@ function isPreconditionFailure(req, res) {
     return false;
 }
 
-function createETagGenerator(options) {
+export function createETagGenerator(options) {
     return function generateETag (body, encoding) {
         if(body instanceof Stats) {
             return etag(body, options);
@@ -324,7 +324,7 @@ function createETagGenerator(options) {
     }
 }
 
-function isRangeFresh(req, res) {
+export function isRangeFresh(req, res) {
     const ifRange = req.headers['if-range'];
     if(!ifRange) {
         return true;
@@ -342,30 +342,5 @@ function isRangeFresh(req, res) {
 }
 
 // fast null object
-const NullObject = function() {};
+export const NullObject = function() {};
 NullObject.prototype = Object.create(null);
-
-module.exports = {
-    removeDuplicateSlashes,
-    patternToRegex,
-    needsConversionToRegex,
-    acceptParams,
-    normalizeType,
-    stringify,
-    defaultSettings,
-    compileTrust,
-    deprecated,
-    UP_PATH_REGEXP,
-    NullObject,
-    decode,
-    containsDotFile,
-    parseTokenList,
-    parseHttpDate,
-    isPreconditionFailure,
-    createETagGenerator,
-    isRangeFresh,
-    findIndexStartingFrom,
-    fastQueryParse,
-    canBeOptimized,
-    EMPTY_REGEX
-};

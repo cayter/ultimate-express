@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const fs = require('fs');
-const path = require('path');
-const bytes = require('bytes');
-const zlib = require('fast-zlib');
-const typeis = require('type-is');
-const querystring = require('fast-querystring');
-const { fastQueryParse, NullObject } = require('./utils.js');
+import fs from 'node:fs';
+import path from 'node:path';
+import bytes from 'bytes';
+import zlib from 'fast-zlib';
+import typeis from 'type-is';
+import * as querystring from 'fast-querystring';
+import { fastQueryParse, NullObject } from './utils.js';
 
-function static(root, options) {
+function staticPath(root, options) {
     if(!options) options = new NullObject();
     if(typeof options.index === 'undefined') options.index = 'index.html';
     if(typeof options.redirect === 'undefined') options.redirect = true;
@@ -332,8 +332,8 @@ const urlencoded = createBodyParser('application/x-www-form-urlencoded', functio
     next();
 });
 
-module.exports = {
-    static,
+export default {
+    static: staticPath,
     json,
     raw,
     text,
