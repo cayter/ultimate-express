@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const uWS = require("uWebSockets.js");
-const Application = require("./application.js");
-const Router = require("./router.js");
-const middlewares = require("./middlewares.js");
-const Request = require("./request.js");
-const Response = require("./response.js");
+import * as uWS from "uWebSockets.js";
+import Application from "./application.js";
+import Router from "./router.js";
+import middlewares from "./middlewares.js";
+import Request from "./request.js";
+import Response from "./response.js";
 
 try {
     // disable Uwebsockets header
@@ -51,4 +51,4 @@ Application.urlencoded = middlewares.urlencoded;
 Application.text = middlewares.text;
 Application.raw = middlewares.raw;
 
-module.exports = Application;
+export default Application;

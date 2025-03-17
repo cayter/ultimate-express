@@ -3,6 +3,7 @@
   "version": "1.4.2",
   "description": "The Ultimate Express. Fastest http server with full Express compatibility, based on uWebSockets.",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "test": "node tests/index.js",
     "dev": "node --inspect=9229 demo/index.js"

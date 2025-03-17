@@ -14,26 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const cookie = require("cookie");
-const mime = require("mime-types");
-const vary = require("vary");
-const encodeUrl = require("encodeurl");
-const { 
+import cookie from "cookie";
+import mime from "mime-types";
+import vary from "vary";
+import encodeUrl from "encodeurl";
+import { 
     normalizeType, stringify, deprecated, UP_PATH_REGEXP, decode,
     containsDotFile, isPreconditionFailure, isRangeFresh, NullObject
-} = require("./utils.js");
-const { Writable } = require("stream");
-const { isAbsolute } = require("path");
-const fs = require("fs");
-const Path = require("path");
-const statuses = require("statuses");
-const { sign } = require("cookie-signature");
+} from "./utils.js";
+import { Writable } from "node:stream";
+import { isAbsolute } from "node:path";
+import fs from "node:fs";
+import Path from "node:path";
+import statuses from "statuses";
+import { sign } from "cookie-signature";
 // events is faster at init, tseep is faster at sending events
 // since we create a ton of objects and dont send a ton of events, its better to use events here
-const { EventEmitter } = require("events");
-const http = require("http");
-const ms = require('ms');   
-const etag = require("etag");
+import { EventEmitter } from "node:events";
+import http from "node:http";
+import ms from 'ms';   
+import etag from "etag";
 
 const outgoingMessage = new http.OutgoingMessage();
 const symbols = Object.getOwnPropertySymbols(outgoingMessage);
@@ -66,7 +66,7 @@ class Socket extends EventEmitter {
     }
 }
 
-module.exports = class Response extends Writable {
+export default class Response extends Writable {
     #socket = null;
     constructor(res, req, app) {
         super();

@@ -14,14 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const uWS = require("uWebSockets.js");
-const Router = require("./router.js");
-const { removeDuplicateSlashes, defaultSettings, compileTrust, createETagGenerator, fastQueryParse, NullObject } = require("./utils.js");
-const querystring = require("fast-querystring");
-const ViewClass = require("./view.js");
-const path = require("path");
-const os = require("os");
-const { Worker } = require("worker_threads");
+import * as uWS from "uWebSockets.js";
+import Router from "./router.js";
+import { removeDuplicateSlashes, defaultSettings, compileTrust, createETagGenerator, fastQueryParse, NullObject } from "./utils.js";
+import * as querystring from "fast-querystring";
+import ViewClass from "./view.js";
+import path from "node:path";
+import { fileURLToPath } from 'node:url';
+import os from "node:os";
+import { Worker } from "node:worker_threads";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const cpuCount = os.cpus().length;
 
@@ -46,7 +50,7 @@ function createWorker() {
     return worker;
 }
 
-class Application extends Router {
+export class Application extends Router {
     constructor(settings = new NullObject()) {
         super(settings);
         if(!settings?.uwsOptions) {
@@ -323,6 +327,6 @@ class Application extends Router {
     }
 }
 
-module.exports = function(options) {
+export default function(options) {
     return new Application(options);
 }

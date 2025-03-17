@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const { patternToRegex, deprecated, NullObject } = require("./utils.js");
-const accepts = require("accepts");
-const typeis = require("type-is");
-const parseRange = require("range-parser");
-const proxyaddr = require("proxy-addr");
-const fresh = require("fresh");
-const { Readable } = require("stream");
+import { patternToRegex, deprecated, NullObject } from "./utils.js";
+import accepts from "accepts";
+import typeis from "type-is";
+import parseRange from "range-parser";
+import proxyaddr from "proxy-addr";
+import fresh from "fresh";
+import { Readable } from "node:stream";
 
 const discardedDuplicates = [
     "age", "authorization", "content-length", "content-type", "etag", "expires",
@@ -31,7 +31,7 @@ const discardedDuplicates = [
 
 let key = 0;
 
-module.exports = class Request extends Readable {
+export default class Request extends Readable {
     #cachedQuery = null;
     #cachedHeaders = null;
     #cachedDistinctHeaders = null;

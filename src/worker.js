@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const fs = require("fs");
-const { parentPort } = require("worker_threads");
+import fs from "node:fs";
+import { parentPort } from "node:worker_threads";
 
 parentPort.on('message', (message) => {
     if(message.type === 'readFile') {
